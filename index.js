@@ -67,11 +67,11 @@ var xAxis = 0;
 var yAxis = 1;
 var zAxis = 2;
 
-var phi = 20;
+var phi = 10;
 var radius = 5.0;
 var near = 10.0;
 var far = 3.0;
-var fovy = 90;
+var fovy = 45;
 var aspect;
 
 var axis = 0;
@@ -84,7 +84,6 @@ init();
 function init() {
   canvas = document.getElementById("gl-canvas");
   canvas.width = window.innerWidth; // Set width to 100% of the viewport
-  canvas.height = window.innerHeight; // Set width to 100% of the viewport
 
   gl = canvas.getContext("webgl2");
   if (!gl) alert("WebGL 2.0 isn't available");
@@ -123,7 +122,6 @@ function init() {
   viewMatrixLocation = gl.getUniformLocation(program, "uViewMatrix");
   projectionMatrixLoc = gl.getUniformLocation(program, "uProjectionMatrix");
   moveMatrixLocation = gl.getUniformLocation(program, "uMoveMatrix");
-  console.log(moveMatrixLocation);
 
   render();
 }
@@ -180,6 +178,6 @@ function render() {
   gl.uniformMatrix4fv(moveMatrixLocation, false, flatten(moveObjectMatrix));
   gl.drawArrays(gl.TRIANGLES, 0, numPositions);
 
-  theta += 0.05;
+  theta += 0.02;
   requestAnimationFrame(render);
 }

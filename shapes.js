@@ -1,7 +1,4 @@
-var vertices = [];
-var vertexColors = [];
-
-function fives(a, b, c, d, e) {
+function fives(a, b, c, d, e, vertices, vertexColors) {
   var positions = [];
   var colors = [];
   var indices = [a, b, c, a, c, d, a, d, e];
@@ -14,10 +11,10 @@ function fives(a, b, c, d, e) {
   return { positions, colors };
 }
 
-function createDodecahedron() {
+function createDeca() {
   const A = (1 + Math.sqrt(5)) / 2; // The golden ratio
   const B = 1 / A;
-  vertices = [
+  var vertices = [
     vec4(1, 1, 1, 1.0),
     vec4(1, 1, -1, 1.0),
     vec4(1, -1, 1, 1.0),
@@ -40,7 +37,7 @@ function createDodecahedron() {
     vec4(-A, 0, -B, 1.0),
   ];
 
-  vertexColors = [
+  var vertexColors = [
     vec4(0.0, 0.0, 0.0, 1.0), // black
     vec4(1.0, 0.0, 0.0, 1.0), // red
     vec4(1.0, 1.0, 0.0, 1.0), // yellow
@@ -63,18 +60,18 @@ function createDodecahedron() {
     vec4(0.5, 0.0, 1.0, 1.0), // violet
   ];
 
-  const f1 = fives(0, 16, 2, 10, 8);
-  const f2 = fives(0, 8, 4, 14, 12);
-  const f3 = fives(16, 17, 1, 12, 0);
-  const f4 = fives(1, 9, 11, 3, 17);
-  const f5 = fives(1, 12, 14, 5, 9);
-  const f6 = fives(2, 13, 15, 6, 10);
-  const f7 = fives(13, 3, 17, 16, 2);
-  const f8 = fives(3, 11, 7, 15, 13);
-  const f9 = fives(4, 8, 10, 6, 18);
-  const f10 = fives(14, 5, 19, 18, 4);
-  const f11 = fives(5, 19, 7, 11, 9);
-  const f12 = fives(15, 7, 19, 18, 6);
+  const f1 = fives(0, 16, 2, 10, 8, vertices, vertexColors);
+  const f2 = fives(0, 8, 4, 14, 12, vertices, vertexColors);
+  const f3 = fives(16, 17, 1, 12, 0, vertices, vertexColors);
+  const f4 = fives(1, 9, 11, 3, 17, vertices, vertexColors);
+  const f5 = fives(1, 12, 14, 5, 9, vertices, vertexColors);
+  const f6 = fives(2, 13, 15, 6, 10, vertices, vertexColors);
+  const f7 = fives(13, 3, 17, 16, 2, vertices, vertexColors);
+  const f8 = fives(3, 11, 7, 15, 13, vertices, vertexColors);
+  const f9 = fives(4, 8, 10, 6, 18, vertices, vertexColors);
+  const f10 = fives(14, 5, 19, 18, 4, vertices, vertexColors);
+  const f11 = fives(5, 19, 7, 11, 9, vertices, vertexColors);
+  const f12 = fives(15, 7, 19, 18, 6, vertices, vertexColors);
 
   const positions = [
     ...f1.positions,
@@ -108,19 +105,19 @@ function createDodecahedron() {
   return { positions, colors };
 }
 
-function quad(a, b, c, d) {
+function quad(a, b, c, d, vertices, vertexColors) {
   const indicies = [a, b, c, a, c, d];
-  var position = [];
+  var positions = [];
   var colors = [];
   for (let i = 0; i < indicies.length; i++) {
     positions.push(vertices[indicies[i]]);
-    colors.push(vertexColors[indicies[1]]);
+    colors.push(vertexColors[indicies[4]]);
   }
   return { positions, colors };
 }
 
 function createCube() {
-  vertices = [
+  var vertices = [
     vec4(-0.5, -0.5, 0.5, 1.0),
     vec4(-0.5, 0.5, 0.5, 1.0),
     vec4(0.5, 0.5, 0.5, 1.0),
@@ -131,7 +128,7 @@ function createCube() {
     vec4(0.5, -0.5, -0.5, 1.0),
   ];
 
-  vertexColors = [
+  var vertexColors = [
     vec4(1.0, 0.0, 0.0, 1.0),
     vec4(1.0, 1.0, 0.0, 1.0),
     vec4(0.0, 1.0, 0.0, 1.0),
@@ -142,12 +139,12 @@ function createCube() {
     vec4(0.0, 1.0, 1.0, 1.0),
   ];
 
-  const f1 = quad(1, 0, 3, 2);
-  const f2 = quad(2, 3, 7, 6);
-  const f3 = quad(3, 0, 4, 7);
-  const f4 = quad(6, 5, 1, 2);
-  const f5 = quad(4, 5, 6, 7);
-  const f6 = quad(5, 4, 0, 1);
+  const f1 = quad(1, 0, 3, 2, vertices, vertexColors);
+  const f2 = quad(2, 3, 7, 6, vertices, vertexColors);
+  const f3 = quad(3, 0, 4, 7, vertices, vertexColors);
+  const f4 = quad(6, 5, 1, 2, vertices, vertexColors);
+  const f5 = quad(4, 5, 6, 7, vertices, vertexColors);
+  const f6 = quad(5, 4, 0, 1, vertices, vertexColors);
 
   const positions = [
     ...f1.positions,
@@ -165,5 +162,71 @@ function createCube() {
     ...f5.colors,
     ...f6.colors,
   ];
+  return { positions, colors };
+}
+
+function createSphere() {
+  var SPHERE_DIV = 30; // Lower divisions to make debugging easier
+  var i, ai, si, ci;
+  var j, aj, sj, cj;
+  var p1, p2;
+  var vertices = [],
+    indices = [];
+
+  // Add north pole
+  vertices.push(vec4(0, 1, 0, 1.0));
+
+  // Generate vertices for the sphere body
+  for (j = 1; j < SPHERE_DIV; j++) {
+    aj = (j * Math.PI) / SPHERE_DIV;
+    sj = Math.sin(aj);
+    cj = Math.cos(aj);
+    for (i = 0; i <= SPHERE_DIV; i++) {
+      ai = (i * 2 * Math.PI) / SPHERE_DIV;
+      si = Math.sin(ai);
+      ci = Math.cos(ai);
+      vertices.push(vec4(si * sj, cj, ci * sj, 1.0));
+    }
+  }
+
+  // Add south pole
+  vertices.push(vec4(0, -1, 0, 1.0));
+
+  // Top hemisphere (north pole)
+  for (i = 0; i < SPHERE_DIV; i++) {
+    indices.push(0, i + 1, i + 2); // Connect north pole to first row
+  }
+
+  // Body of the sphere
+  for (j = 0; j < SPHERE_DIV - 2; j++) {
+    for (i = 0; i < SPHERE_DIV; i++) {
+      p1 = j * (SPHERE_DIV + 1) + i + 1;
+      p2 = p1 + (SPHERE_DIV + 1);
+      indices.push(p1, p2, p1 + 1);
+      indices.push(p1 + 1, p2, p2 + 1);
+    }
+  }
+
+  // Bottom hemisphere (south pole)
+  var lastRowOffset = (SPHERE_DIV - 2) * (SPHERE_DIV + 1) + 1;
+  var southPoleIndex = vertices.length - 1;
+  for (i = 0; i < SPHERE_DIV; i++) {
+    indices.push(southPoleIndex, lastRowOffset + i, lastRowOffset + i + 1); // Connect last row to south pole
+  }
+
+  var vertexColors = [
+    vec4(1.0, 0.0, 0.0, 1.0), // Red
+    vec4(0.0, 0.0, 1.0, 1.0), // Blue
+  ];
+
+  let positions = [];
+  let colors = [];
+
+  for (let i = 0; i < indices.length; i++) {
+    const index = indices[i];
+    positions.push(vertices[index]);
+    colors.push(vertexColors[i % vertexColors.length]); // Cycle through colors
+  }
+
   return { positions, colors };
 }

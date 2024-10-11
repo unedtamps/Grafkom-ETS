@@ -16,6 +16,18 @@
       <option value="sphere">Sphere</option>
       <option value="cube">Cube</option>
     </select>
+    <h2>Menu</h2>
+    <button type="button" id="toggle">Start</button>
+    <button type="button" id="reset">Reset</button>
+
+    <h2>Select Move</h2>
+    <select name="move" id="move">
+      <option value="glb">Gerak Lurus Beraturan</option>
+      <option value="glbb">Gerak Lurus Berubah Beraturan</option>
+      <option value="gva">Gerak Vertikal Atas</option>
+      <option value="gvb">Gerak Vertikal Bawah</option>
+      <option value="gvab">Gerak Vertical Atas Bawah</option>
+    </select>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
       #version 300 es
@@ -27,12 +39,14 @@
       uniform mat4 uViewMatrix;
       uniform mat4 uProjectionMatrix;
       uniform mat4 uMoveMatrix;
+      uniform mat4 uRotateMatrix;
 
       void main()
       {
 
           vColor = aColor;
-          gl_Position =  uMoveMatrix * uProjectionMatrix * uViewMatrix * aPosition ;
+
+          gl_Position = uProjectionMatrix * uMoveMatrix * uRotateMatrix  * uViewMatrix   * aPosition;
           gl_Position.z = -gl_Position.z;
       }
     </script>
@@ -54,6 +68,8 @@
 
     <script src="initShaders.js"></script>
     <script src="MVnew.js"></script>
+    <script src="shapes.js"></script>
+    <script src="moveMatrix.js"></script>
     <script src="index.js"></script>
   </body>
 </html>

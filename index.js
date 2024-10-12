@@ -4,7 +4,7 @@ var canvas;
 var gl;
 var shasp;
 
-var numPositions = 5000;
+var numPositions = 50000;
 
 var shape = createDeca();
 var viewMatrixLocation;
@@ -15,14 +15,16 @@ var toggle = false;
 
 let movespeed = 0.01;
 let direction = 1;
-let moveX = -2;
-let moveY = -2;
+let moveX = -6;
+let moveY = 0;
 let moveZ = 0;
 let angle = 0;
+let acceleration = 0;
+let timeSecond = 0;
+let timeprev = new Date().getTime();
+let force = 0;
+let mass = 10000;
 
-var xAxis = 0;
-var yAxis = 1;
-var zAxis = 2;
 var flag = false;
 
 var phi = 0;
@@ -45,7 +47,10 @@ var move = uniformStrightMove(
   movespeed,
   direction,
   angle,
+  acceleration,
+  timeSecond,
 );
+console.log(move);
 var moveFunc = uniformStrightMove;
 
 init();
@@ -122,13 +127,77 @@ function init() {
     }
   });
   const selectMove = document.getElementById("move");
+  let glb = document.getElementById("glb-input");
+  let gva = document.getElementById("gva-input");
+  let glbb = document.getElementById("glbb-input");
+  let gvb = document.getElementById("gvb-input");
   selectMove.addEventListener("change", function () {
     switch (this.value) {
       case "glb":
-        moveFunc = uniformStrightMove;
+        gva.setAttribute("hidden", true);
+        glb.removeAttribute("hidden");
+        const glb_v = document.getElementById("glb-v");
+        glb_v.addEventListener("change", function (event) {
+          console.log(event.target.value);
+          movespeed = parseFloat(event.target.value);
+          timeSecond = 0;
+          if (!movespeed) {
+            movespeed = 0.01;
+          }
+          moveFunc = uniformStrightMove;
+        });
         break;
+      case "glbb":
+        glb.setAttribute("hidden", true);
+        gva.setAttribute("hidden", true);
+
+        glbb.removeAttribute("hidden");
+        const glbb_v = document.getElementById("glbb-v");
+        glbb_v.addEventListener("change", function (event) {
+          movespeed = parseFloat(event.target.value);
+          if (!movespeed) {
+            movespeed = 0.01;
+          }
+        });
+        var mass = 1;
+        var force = 4;
+        const glbb_m = document.getElementById("glbb-m");
+        glbb_m.addEventListener("change", function (event) {
+          mass = parseFloat(event.target.value);
+          if (!mass) {
+            mass = 1;
+          }
+        });
+        const glbb_f = document.getElementById("glbb-f");
+        glbb_f.addEventListener("change", function (event) {
+          force = parseFloat(event.target.value);
+          if (!force) {
+            force = 4;
+          }
+        });
+        acceleration = force / mass;
+
+        document.getElementById("glbb-start").onclick = function () {
+          timeSecond = 0;
+          moveFunc = constantAcceleration;
+        };
+        moveFunc = constantAcceleration;
+        break;
+
       case "gva":
-        moveY = -3;
+        glb.setAttribute("hidden", true);
+        gva.removeAttribute("hidden");
+        const gva_v = document.getElementById("gva-v");
+        gva_v.addEventListener("change", function (event) {
+          console.log(event.target.value);
+          movespeed = parseFloat(event.target.value);
+          if (!movespeed) {
+            movespeed = 50;
+          }
+          timeSecond = 0;
+          acceleration = 10;
+          moveFunc = verticalMove;
+        });
         moveFunc = verticalMove;
         break;
     }
@@ -145,6 +214,9 @@ function init() {
     moveX = -4;
     moveY = -2;
     moveZ = 0;
+    flag = false;
+    document.getElementById("toggle").innerText = "Start";
+    timeSecond = 0;
   };
 
   viewMatrixLocation = gl.getUniformLocation(program, "uViewMatrix");
@@ -159,17 +231,26 @@ function render() {
   //setTimeout( function() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-  // Change move
-
   // const cameraPosition = vec3(0, 0, 5); // Move farther back by increasing Z (e.g., 10)
   const cameraPosition = vec3(
     radius * Math.sin(theta) * Math.cos(phi),
     radius * Math.sin(theta) * Math.sin(phi),
     radius * Math.cos(theta),
   );
-  console.log(move);
+  // console.log(move);
   if (flag) {
-    move = moveFunc(theta, moveX, moveY, moveZ, movespeed, direction, angle);
+    timeSecond += 0.01;
+    move = moveFunc(
+      theta,
+      moveX,
+      moveY,
+      moveZ,
+      movespeed,
+      direction,
+      angle,
+      acceleration,
+      timeSecond,
+    );
     theta = move.theta;
     moveX = move.moveX;
     moveY = move.moveY;

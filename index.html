@@ -16,18 +16,38 @@
       <option value="sphere">Sphere</option>
       <option value="cube">Cube</option>
     </select>
-    <h2>Menu</h2>
-    <button type="button" id="toggle">Start</button>
-    <button type="button" id="reset">Reset</button>
 
     <h2>Select Move</h2>
     <select name="move" id="move">
+      <option>---move option---</option>
       <option value="glb">Gerak Lurus Beraturan</option>
       <option value="glbb">Gerak Lurus Berubah Beraturan</option>
-      <option value="gva">Gerak Vertikal Atas</option>
-      <option value="gvb">Gerak Vertikal Bawah</option>
-      <option value="gvab">Gerak Vertical Atas Bawah</option>
+      <option value="gva">Gerak Vertikal</option>
     </select>
+
+    <div hidden id="glb-input">
+      <label for="glb-v">velocity: </label>
+      <input id="glb-v" type="text" />
+    </div>
+
+    <div hidden id="glbb-input">
+      <label for="glbb-m">mass </label>
+      <input id="glbb-m" type="text" />
+      <label for="glbb-f">force </label>
+      <input id="glbb-f" type="text" />
+      <label for="glbb-v">velocity </label>
+      <input id="glbb-v" type="text" />
+      <button id="glbb-start">Ok</button>
+    </div>
+
+    <div hidden id="gva-input">
+      <label for="gva-v">velocity</label>
+      <input id="gva-v" type="text" />
+    </div>
+
+    <h2>Menu</h2>
+    <button type="button" id="toggle">Start</button>
+    <button type="button" id="reset">Reset</button>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
       #version 300 es

@@ -110,9 +110,53 @@ function quad(a, b, c, d, vertices, vertexColors) {
   var positions = [];
   var colors = [];
   for (let i = 0; i < indicies.length; i++) {
-    positions.push(vertices[indicies[i]]);
-    colors.push(vertexColors[indicies[4]]);
+      positions.push(vertices[indicies[i]]);
+      colors.push(vertexColors[i % vertexColors.length]); 
   }
+  return { positions, colors };
+}
+
+function createPrism() {
+  var scale = 2.0;
+  var vertices = [
+    vec4(-0.5 * scale, -0.5 * scale, 0.5 * scale, 1.0), // Bottom face
+    vec4(0.5 * scale, -0.5 * scale, 0.5 * scale, 1.0),
+    vec4(0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
+    vec4(-0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
+    vec4(0.0 * scale, 0.5 * scale, 0.0 * scale, 1.0),   
+  ];  
+
+  var vertexColors = [
+    vec4(1.0, 0.0, 0.0, 1.0),  
+    vec4(0.0, 1.0, 0.0, 1.0),   
+    vec4(0.0, 0.0, 1.0, 1.0),  
+    vec4(1.0, 1.0, 0.0, 1.0),  
+    vec4(1.0, 0.0, 0.0, 1.0),   
+  ];
+
+  const f1 = quad(0, 1, 4, 4, vertices, vertexColors); 
+  const f2 = quad(1, 2, 4, 4, vertices, vertexColors); 
+  const f3 = quad(2, 3, 4, 4, vertices, vertexColors); 
+  const f4 = quad(3, 0, 4, 4, vertices, vertexColors); 
+
+  const bottomFace = quad(0, 1, 2, 3, vertices, vertexColors); 
+
+  const positions = [
+    ...f1.positions,
+    ...f2.positions,
+    ...f3.positions,
+    ...f4.positions,
+    ...bottomFace.positions,
+  ];
+
+  const colors = [
+    ...f1.colors,
+    ...f2.colors,
+    ...f3.colors,
+    ...f4.colors,
+    ...bottomFace.colors,
+  ];
+
   return { positions, colors };
 }
 

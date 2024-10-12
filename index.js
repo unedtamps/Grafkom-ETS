@@ -101,6 +101,11 @@ function init() {
         shape = createDeca();
         createBuffer(gl, program);
         break;
+      case "prism":
+        console.log("prism");
+        shape = createPrism();
+        createBuffer(gl, program);
+        break;
       case "cube":
         console.log("cube");
         shape = createCube();

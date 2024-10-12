@@ -109,9 +109,10 @@ function quad(a, b, c, d, vertices, vertexColors) {
   const indicies = [a, b, c, a, c, d];
   var positions = [];
   var colors = [];
+  var indexColor = Math.round(Math.random() * (vertexColors.length - 1));
   for (let i = 0; i < indicies.length; i++) {
-      positions.push(vertices[indicies[i]]);
-      colors.push(vertexColors[i % vertexColors.length]); 
+    positions.push(vertices[indicies[i]]);
+    colors.push(vertexColors[indexColor]);
   }
   return { positions, colors };
 }
@@ -123,23 +124,38 @@ function createPrism() {
     vec4(0.5 * scale, -0.5 * scale, 0.5 * scale, 1.0),
     vec4(0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
     vec4(-0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
-    vec4(0.0 * scale, 0.5 * scale, 0.0 * scale, 1.0),   
-  ];  
-
-  var vertexColors = [
-    vec4(1.0, 0.0, 0.0, 1.0),  
-    vec4(0.0, 1.0, 0.0, 1.0),   
-    vec4(0.0, 0.0, 1.0, 1.0),  
-    vec4(1.0, 1.0, 0.0, 1.0),  
-    vec4(1.0, 0.0, 0.0, 1.0),   
+    vec4(0.0 * scale, 0.5 * scale, 0.0 * scale, 1.0),
   ];
 
-  const f1 = quad(0, 1, 4, 4, vertices, vertexColors); 
-  const f2 = quad(1, 2, 4, 4, vertices, vertexColors); 
-  const f3 = quad(2, 3, 4, 4, vertices, vertexColors); 
-  const f4 = quad(3, 0, 4, 4, vertices, vertexColors); 
+  var vertexColors = [
+    vec4(0.0, 0.0, 0.0, 1.0), // black
+    vec4(1.0, 0.0, 0.0, 1.0), // red
+    vec4(1.0, 1.0, 0.0, 1.0), // yellow
+    vec4(0.0, 1.0, 0.0, 1.0), // green
+    vec4(0.0, 0.0, 1.0, 1.0), // blue
+    vec4(0.5, 0.0, 0.0, 1.0), // dark red
+    vec4(1.0, 0.0, 1.0, 1.0), // magenta
+    vec4(0.0, 1.0, 1.0, 1.0), // cyan
+    vec4(0.5, 1.0, 1.0, 1.0), // white
+    vec4(0.5, 0.5, 0.0, 1.0), // olive
+    vec4(0.0, 0.5, 0.0, 1.0), // dark green
+    vec4(0.0, 0.0, 0.5, 1.0), // dark blue
+    vec4(0.5, 0.0, 0.5, 1.0), // purple
+    vec4(0.0, 0.5, 0.5, 1.0), // teal
+    vec4(0.5, 0.5, 0.5, 1.0), // gray
+    vec4(1.0, 0.5, 0.0, 1.0), // orange
+    vec4(0.5, 1.0, 0.0, 1.0), // lime
+    vec4(0.0, 1.0, 0.5, 1.0), // aqua
+    vec4(1.0, 0.0, 0.5, 1.0), // pink
+    vec4(0.5, 0.0, 1.0, 1.0), // violet
+  ];
 
-  const bottomFace = quad(0, 1, 2, 3, vertices, vertexColors); 
+  const f1 = quad(0, 1, 4, 4, vertices, vertexColors);
+  const f2 = quad(1, 2, 4, 4, vertices, vertexColors);
+  const f3 = quad(2, 3, 4, 4, vertices, vertexColors);
+  const f4 = quad(3, 0, 4, 4, vertices, vertexColors);
+
+  const bottomFace = quad(0, 1, 2, 3, vertices, vertexColors);
 
   const positions = [
     ...f1.positions,
@@ -161,26 +177,39 @@ function createPrism() {
 }
 
 function createCube() {
+  var scale = 2;
   var vertices = [
-    vec4(-0.5, -0.5, 0.5, 1.0),
-    vec4(-0.5, 0.5, 0.5, 1.0),
-    vec4(0.5, 0.5, 0.5, 1.0),
-    vec4(0.5, -0.5, 0.5, 1.0),
-    vec4(-0.5, -0.5, -0.5, 1.0),
-    vec4(-0.5, 0.5, -0.5, 1.0),
-    vec4(0.5, 0.5, -0.5, 1.0),
-    vec4(0.5, -0.5, -0.5, 1.0),
+    vec4(-0.5 * scale, -0.5 * scale, 0.5 * scale, 1.0),
+    vec4(-0.5 * scale, 0.5 * scale, 0.5 * scale, 1.0),
+    vec4(0.5 * scale, 0.5 * scale, 0.5 * scale, 1.0),
+    vec4(0.5 * scale, -0.5 * scale, 0.5 * scale, 1.0),
+    vec4(-0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
+    vec4(-0.5 * scale, 0.5 * scale, -0.5 * scale, 1.0),
+    vec4(0.5 * scale, 0.5 * scale, -0.5 * scale, 1.0),
+    vec4(0.5 * scale, -0.5 * scale, -0.5 * scale, 1.0),
   ];
 
   var vertexColors = [
-    vec4(1.0, 0.0, 0.0, 1.0),
-    vec4(1.0, 1.0, 0.0, 1.0),
-    vec4(0.0, 1.0, 0.0, 1.0),
-    vec4(0.0, 0.0, 1.0, 1.0),
-    vec4(1.0, 0.0, 1.0, 1.0),
-    vec4(1.0, 1.0, 1.0, 1.0),
-    vec4(0.5, 0.5, 0.5, 1.0),
-    vec4(0.0, 1.0, 1.0, 1.0),
+    vec4(0.0, 0.0, 0.0, 1.0), // black
+    vec4(1.0, 0.0, 0.0, 1.0), // red
+    vec4(1.0, 1.0, 0.0, 1.0), // yellow
+    vec4(0.0, 1.0, 0.0, 1.0), // green
+    vec4(0.0, 0.0, 1.0, 1.0), // blue
+    vec4(0.5, 0.0, 0.0, 1.0), // dark red
+    vec4(1.0, 0.0, 1.0, 1.0), // magenta
+    vec4(0.0, 1.0, 1.0, 1.0), // cyan
+    vec4(0.5, 1.0, 1.0, 1.0), // white
+    vec4(0.5, 0.5, 0.0, 1.0), // olive
+    vec4(0.0, 0.5, 0.0, 1.0), // dark green
+    vec4(0.0, 0.0, 0.5, 1.0), // dark blue
+    vec4(0.5, 0.0, 0.5, 1.0), // purple
+    vec4(0.0, 0.5, 0.5, 1.0), // teal
+    vec4(0.5, 0.5, 0.5, 1.0), // gray
+    vec4(1.0, 0.5, 0.0, 1.0), // orange
+    vec4(0.5, 1.0, 0.0, 1.0), // lime
+    vec4(0.0, 1.0, 0.5, 1.0), // aqua
+    vec4(1.0, 0.0, 0.5, 1.0), // pink
+    vec4(0.5, 0.0, 1.0, 1.0), // violet
   ];
 
   const f1 = quad(1, 0, 3, 2, vertices, vertexColors);

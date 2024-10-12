@@ -4,7 +4,7 @@ var canvas;
 var gl;
 var shasp;
 
-var numPositions = 50000;
+var numPositions = 10000;
 
 var shape = createDeca();
 var viewMatrixLocation;
@@ -16,7 +16,7 @@ var toggle = false;
 let movespeed = 0.01;
 let direction = 1;
 let moveX = -6;
-let moveY = -2.3;
+let moveY = -2.4;
 let moveZ = 0;
 let angle = 0;
 let acceleration = 0;
@@ -29,10 +29,17 @@ var flag = false;
 
 var phi = 0;
 var radius = 10.0;
-var near = 10.0;
-var far = 3.0;
+var near = -10;
+var far = 4.0;
 var fovy = 45;
 var aspect;
+
+// var phi = 0;
+// var radius = 10.0;
+// var near = 10.0;
+// var far = 3.0;
+// var fovy = 45;
+// var aspect;
 
 var axis = 0;
 var theta = 0.2;
@@ -197,6 +204,7 @@ function init() {
           if (!movespeed) {
             movespeed = 50;
           }
+          moveY = -2.3;
           timeSecond = 0;
           acceleration = 10;
           moveFunc = verticalMove;
@@ -261,6 +269,9 @@ function render() {
     angle = move.angle;
     direction = move.direction;
     movespeed = move.movespeed;
+  } else {
+    theta += 0.01;
+    angle += 2;
   }
 
   const target = vec3(0.0, 0.0, 0.0); // Look at the center (the object)

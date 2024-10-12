@@ -79,19 +79,24 @@ function verticalMove(
   acc,
   time,
 ) {
-  theta += 0.05;
-  var preMove = movespeed * (time - 0.01) - acc * Math.pow(time - 0.01, 2);
-  var currentMove = movespeed * time - acc * Math.pow(time, 2);
-  moveY = moveY + (currentMove - preMove);
-  console.log(currentMove - preMove);
-  console.log(moveY);
-  angle += 5;
-  // console.log("time", time);
-  if (moveY <= -2.5) {
+  if (moveY <= -2.4) {
     time = 0;
     acc = 0;
-    moveY = -2.5;
+    moveY = -2.4;
+    acc = 0;
+    movespeed = 0;
+    console.log("masuk");
   }
+  theta += 0.05;
+  var prevMove = movespeed * (time - 0.01) - acc * Math.pow(time - 0.01, 2);
+  var currentMove = movespeed * time - acc * Math.pow(time, 2);
+  moveY = moveY + (currentMove - prevMove);
+  angle += 5;
+  // console.log("time", time);
+  document.getElementById("v-value").innerText = (
+    (currentMove - prevMove) /
+    0.01
+  ).toFixed(2);
   return {
     theta,
     angle,

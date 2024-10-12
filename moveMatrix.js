@@ -10,12 +10,18 @@ function uniformStrightMove(
   time,
 ) {
   var scale = 100;
+  var prevMove = movespeed * (time - 0.01);
+  var currentMove = movespeed * time;
   theta += 0.05;
-  moveX += (movespeed * direction) / scale;
+  moveX = moveX + (currentMove - prevMove);
   angle += 5;
   if (moveX > 11) {
     moveX = -11;
   }
+  document.getElementById("v-value").innerText = (
+    (currentMove - prevMove) /
+    0.01
+  ).toFixed(2);
   return {
     theta,
     angle,
@@ -38,16 +44,19 @@ function constantAcceleration(
   acc,
   time,
 ) {
-  var scale = 100;
-  var prevmove =
-    (movespeed * (time - 0.01) + acc * Math.pow(time - 0.01, 2)) / scale;
+  console.log(acc);
+  var prevmove = movespeed * (time - 0.01) + acc * Math.pow(time - 0.01, 2);
   theta += 0.05;
-  var calcuate = (movespeed * time + acc * Math.pow(time, 2)) / scale;
+  var calcuate = movespeed * time + acc * Math.pow(time, 2);
   moveX = moveX + (calcuate - prevmove);
   angle += 5;
   if (moveX > 11) {
     moveX = -11;
   }
+  document.getElementById("v-value").innerText = (
+    (calcuate - prevmove) /
+    0.01
+  ).toFixed(2);
   return {
     theta,
     angle,
@@ -70,17 +79,18 @@ function verticalMove(
   acc,
   time,
 ) {
-  var scale = 100;
   theta += 0.05;
-  console.log("time", time);
-  moveY = (movespeed * time - (acc * Math.pow(time, 2)) / 2) / 100;
+  var preMove = movespeed * (time - 0.01) - acc * Math.pow(time - 0.01, 2);
+  var currentMove = movespeed * time - acc * Math.pow(time, 2);
+  moveY = moveY + (currentMove - preMove);
+  console.log(currentMove - preMove);
+  console.log(moveY);
   angle += 5;
   // console.log("time", time);
-  console.log("MoveY", moveY);
-  if (moveY <= -2) {
+  if (moveY <= -2.5) {
     time = 0;
     acc = 0;
-    moveY = -2;
+    moveY = -2.5;
   }
   return {
     theta,

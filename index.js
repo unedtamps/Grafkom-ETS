@@ -16,7 +16,7 @@ var toggle = false;
 let movespeed = 0.01;
 let direction = 1;
 let moveX = -6;
-let moveY = 0;
+let moveY = -2.3;
 let moveZ = 0;
 let angle = 0;
 let acceleration = 0;
@@ -147,18 +147,20 @@ function init() {
         gva.setAttribute("hidden", true);
 
         glbb.removeAttribute("hidden");
+        var mass = 1;
+        var force = 4;
         const glbb_v = document.getElementById("glbb-v");
         glbb_v.addEventListener("change", function (event) {
           movespeed = parseFloat(event.target.value);
+          console.log(movespeed);
           if (!movespeed) {
             movespeed = 0.01;
           }
         });
-        var mass = 1;
-        var force = 4;
         const glbb_m = document.getElementById("glbb-m");
         glbb_m.addEventListener("change", function (event) {
           mass = parseFloat(event.target.value);
+          console.log(mass);
           if (!mass) {
             mass = 1;
           }
@@ -166,21 +168,22 @@ function init() {
         const glbb_f = document.getElementById("glbb-f");
         glbb_f.addEventListener("change", function (event) {
           force = parseFloat(event.target.value);
+          console.log(force);
           if (!force) {
             force = 4;
           }
         });
-        acceleration = force / mass;
 
         document.getElementById("glbb-start").onclick = function () {
+          acceleration = force / mass;
           timeSecond = 0;
           moveFunc = constantAcceleration;
         };
-        moveFunc = constantAcceleration;
         break;
 
       case "gva":
         glb.setAttribute("hidden", true);
+        glbb.setAttribute("hidden", true);
         gva.removeAttribute("hidden");
         const gva_v = document.getElementById("gva-v");
         gva_v.addEventListener("change", function (event) {

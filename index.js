@@ -13,17 +13,18 @@ var moveMatrixLocation;
 var rotationMatrixLocation;
 var toggle = false;
 
-let movespeed = 0.01;
-let direction = 1;
-let moveX = -6;
-let moveY = -2.4;
-let moveZ = 0;
+let movespeed = 0;
 let angle = 0;
 let acceleration = 0;
 let timeSecond = 0;
 let timeprev = new Date().getTime();
 let force = 0;
 let mass = 10000;
+
+//move
+let moveX = -6.5;
+let moveY = -2.4;
+let moveZ = -1;
 
 var flag = false;
 
@@ -42,7 +43,7 @@ var aspect;
 // var aspect;
 
 var axis = 0;
-var theta = 0.2;
+var theta = 0.0;
 
 var thetaLoc;
 
@@ -52,7 +53,6 @@ var move = uniformStrightMove(
   moveY,
   moveZ,
   movespeed,
-  direction,
   angle,
   acceleration,
   timeSecond,
@@ -143,6 +143,7 @@ function init() {
       case "glb":
         gva.setAttribute("hidden", true);
         glb.removeAttribute("hidden");
+        glbb.setAttribute("hidden", true);
         const glb_v = document.getElementById("glb-v");
         glb_v.addEventListener("change", function (event) {
           console.log(event.target.value);
@@ -222,10 +223,11 @@ function init() {
   };
 
   document.getElementById("reset").onclick = function () {
-    moveX = -4;
-    moveY = -2;
-    moveZ = 0;
     flag = false;
+
+    moveX = -6.5;
+    moveY = -2.4;
+    moveZ = -1;
     document.getElementById("toggle").innerText = "Start";
     timeSecond = 0;
   };
@@ -250,14 +252,13 @@ function render() {
   );
   // console.log(move);
   if (flag) {
-    timeSecond += 0.01;
+    timeSecond += 0.015;
     move = moveFunc(
       theta,
       moveX,
       moveY,
       moveZ,
       movespeed,
-      direction,
       angle,
       acceleration,
       timeSecond,
@@ -267,7 +268,6 @@ function render() {
     moveY = move.moveY;
     moveZ = move.moveZ;
     angle = move.angle;
-    direction = move.direction;
     movespeed = move.movespeed;
   } else {
     theta += 0.01;
@@ -278,7 +278,7 @@ function render() {
   const upDirection = vec3(0.0, 1.0, 0.0); // Up is in the Y direction
   var moveObjectMatrix = translate(moveX, moveY, moveZ);
 
-  const rotationMatrix = rotate(angle, [0, 0, 1]);
+  const rotationMatrix = rotate(angle, [0, 0, 2]);
 
   var modelViewMatrix = lookAt(cameraPosition, target, upDirection);
   var projectionMatrix = perspective(fovy, aspect, near, far);

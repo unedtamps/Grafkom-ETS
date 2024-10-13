@@ -1,12 +1,11 @@
-function fives(a, b, c, d, e, vertices, vertexColors) {
+function fives(a, b, c, d, e, vertices, vertexColors, colorIndex) {
   var positions = [];
   var colors = [];
   var indices = [a, b, c, a, c, d, a, d, e];
-  const colorIndex = Math.round(Math.random() * 8);
 
   for (var i = 0; i < indices.length; ++i) {
     positions.push(vertices[indices[i]]);
-    colors.push(vertexColors[indices[colorIndex]]); // Use the color of the first vertex for solid colors
+    colors.push(vertexColors[colorIndex]); // Use the color of the first vertex for solid colors
   }
   return { positions, colors };
 }
@@ -46,7 +45,6 @@ function createDeca() {
     vec4(0.5, 0.0, 0.0, 1.0), // dark red
     vec4(1.0, 0.0, 1.0, 1.0), // magenta
     vec4(0.0, 1.0, 1.0, 1.0), // cyan
-    vec4(0.5, 1.0, 1.0, 1.0), // white
     vec4(0.5, 0.5, 0.0, 1.0), // olive
     vec4(0.0, 0.5, 0.0, 1.0), // dark green
     vec4(0.0, 0.0, 0.5, 1.0), // dark blue
@@ -59,19 +57,23 @@ function createDeca() {
     vec4(1.0, 0.0, 0.5, 1.0), // pink
     vec4(0.5, 0.0, 1.0, 1.0), // violet
   ];
+  vertexColors = vertexColors
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
 
-  const f1 = fives(0, 16, 2, 10, 8, vertices, vertexColors);
-  const f2 = fives(0, 8, 4, 14, 12, vertices, vertexColors);
-  const f3 = fives(16, 17, 1, 12, 0, vertices, vertexColors);
-  const f4 = fives(1, 9, 11, 3, 17, vertices, vertexColors);
-  const f5 = fives(1, 12, 14, 5, 9, vertices, vertexColors);
-  const f6 = fives(2, 13, 15, 6, 10, vertices, vertexColors);
-  const f7 = fives(13, 3, 17, 16, 2, vertices, vertexColors);
-  const f8 = fives(3, 11, 7, 15, 13, vertices, vertexColors);
-  const f9 = fives(4, 8, 10, 6, 18, vertices, vertexColors);
-  const f10 = fives(14, 5, 19, 18, 4, vertices, vertexColors);
-  const f11 = fives(5, 19, 7, 11, 9, vertices, vertexColors);
-  const f12 = fives(15, 7, 19, 18, 6, vertices, vertexColors);
+  const f1 = fives(0, 16, 2, 10, 8, vertices, vertexColors, 1);
+  const f2 = fives(0, 8, 4, 14, 12, vertices, vertexColors, 2);
+  const f3 = fives(16, 17, 1, 12, 0, vertices, vertexColors, 3);
+  const f4 = fives(1, 9, 11, 3, 17, vertices, vertexColors, 4);
+  const f5 = fives(1, 12, 14, 5, 9, vertices, vertexColors, 5);
+  const f6 = fives(2, 13, 15, 6, 10, vertices, vertexColors, 6);
+  const f7 = fives(13, 3, 17, 16, 2, vertices, vertexColors, 7);
+  const f8 = fives(3, 11, 7, 15, 13, vertices, vertexColors, 8);
+  const f9 = fives(4, 8, 10, 6, 18, vertices, vertexColors, 9);
+  const f10 = fives(14, 5, 19, 18, 4, vertices, vertexColors, 10);
+  const f11 = fives(5, 19, 7, 11, 9, vertices, vertexColors, 11);
+  const f12 = fives(15, 7, 19, 18, 6, vertices, vertexColors, 12);
 
   const positions = [
     ...f1.positions,
@@ -239,15 +241,17 @@ function createCube() {
 }
 
 function createSphere() {
-  var SPHERE_DIV = 30; // Lower divisions to make debugging easier
+  var SPHERE_DIV = 40; // Lower divisions to make debugging easier
   var i, ai, si, ci;
   var j, aj, sj, cj;
   var p1, p2;
   var vertices = [],
     indices = [];
 
+  var scale = 1.5; // Scaling factor
+
   // Add north pole
-  vertices.push(vec4(0, 1, 0, 1.0));
+  vertices.push(vec4(0, scale * 1, 0, 1.0)); // Scale the y-coordinate
 
   // Generate vertices for the sphere body
   for (j = 1; j < SPHERE_DIV; j++) {
@@ -258,12 +262,12 @@ function createSphere() {
       ai = (i * 2 * Math.PI) / SPHERE_DIV;
       si = Math.sin(ai);
       ci = Math.cos(ai);
-      vertices.push(vec4(si * sj, cj, ci * sj, 1.0));
+      vertices.push(vec4(scale * si * sj, scale * cj, scale * ci * sj, 1.0)); // Scale all coordinates
     }
   }
 
-  // Add south pole
-  vertices.push(vec4(0, -1, 0, 1.0));
+  // // Add south pole
+  vertices.push(vec4(0, scale * -1, 0, 1.0)); // Scale the y-coordinate
 
   // Top hemisphere (north pole)
   for (i = 0; i < SPHERE_DIV; i++) {
@@ -289,16 +293,19 @@ function createSphere() {
 
   var vertexColors = [
     vec4(1.0, 0.0, 0.0, 1.0), // Red
-    vec4(0.0, 0.0, 1.0, 1.0), // Blue
+    vec4(0.0, 1.0, 0.0, 1.0), // Green
   ];
 
   let positions = [];
   let colors = [];
+  const colorChangeInterval = indices.length / 2;
 
   for (let i = 0; i < indices.length; i++) {
     const index = indices[i];
     positions.push(vertices[index]);
-    colors.push(vertexColors[i % vertexColors.length]); // Cycle through colors
+    const colorIndex =
+      Math.floor(i / colorChangeInterval) % vertexColors.length;
+    colors.push(vertexColors[colorIndex]);
   }
 
   return { positions, colors };

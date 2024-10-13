@@ -4,15 +4,13 @@ function uniformStrightMove(
   moveY,
   moveZ,
   movespeed,
-  direction,
   angle,
   acc,
   time,
 ) {
-  var scale = 100;
-  var prevMove = movespeed * (time - 0.01);
+  var prevMove = movespeed * (time - 0.015);
   var currentMove = movespeed * time;
-  theta += 0.05;
+  theta += 0.005;
   moveX = moveX + (currentMove - prevMove);
   angle += 5;
   if (moveX > 11) {
@@ -20,12 +18,11 @@ function uniformStrightMove(
   }
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /
-    0.01
+    0.015
   ).toFixed(2);
   return {
     theta,
     angle,
-    direction,
     moveX,
     moveY,
     moveZ,
@@ -39,14 +36,13 @@ function constantAcceleration(
   moveY,
   moveZ,
   movespeed,
-  direction,
   angle,
   acc,
   time,
 ) {
   console.log(acc);
-  var prevmove = movespeed * (time - 0.01) + acc * Math.pow(time - 0.01, 2);
-  theta += 0.05;
+  var prevmove = movespeed * (time - 0.015) + acc * Math.pow(time - 0.015, 2);
+  theta += 0.005;
   var calcuate = movespeed * time + acc * Math.pow(time, 2);
   moveX = moveX + (calcuate - prevmove);
   angle += 5;
@@ -55,12 +51,11 @@ function constantAcceleration(
   }
   document.getElementById("v-value").innerText = (
     (calcuate - prevmove) /
-    0.01
+    0.015
   ).toFixed(2);
   return {
     theta,
     angle,
-    direction,
     moveX,
     moveY,
     moveZ,
@@ -68,39 +63,27 @@ function constantAcceleration(
   };
 }
 
-function verticalMove(
-  theta,
-  moveX,
-  moveY,
-  moveZ,
-  movespeed,
-  direction,
-  angle,
-  acc,
-  time,
-) {
+function verticalMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time) {
   if (moveY <= -2.4) {
     time = 0;
     acc = 0;
     moveY = -2.4;
     acc = 0;
     movespeed = 0;
-    console.log("masuk");
   }
-  theta += 0.05;
-  var prevMove = movespeed * (time - 0.01) - acc * Math.pow(time - 0.01, 2);
+  theta += 0.005;
+  var prevMove = movespeed * (time - 0.015) - acc * Math.pow(time - 0.015, 2);
   var currentMove = movespeed * time - acc * Math.pow(time, 2);
   moveY = moveY + (currentMove - prevMove);
   angle += 5;
-  // console.log("time", time);
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /
-    0.01
+    0.015
   ).toFixed(2);
+  document.getElementById("h-value").innerText = currentMove.toFixed(2);
   return {
     theta,
     angle,
-    direction,
     moveX,
     moveY,
     moveZ,

@@ -59,7 +59,7 @@ var move = uniformStrightMove(
   acceleration,
   timeSecond,
   anglex,
-  toggleff
+  toggleff,
 );
 console.log(move);
 var moveFunc = uniformStrightMove;
@@ -215,12 +215,21 @@ function init() {
           if (!movespeed) {
             movespeed = 50;
           }
+        });
+        const gva_g = document.getElementById("gva-g");
+        gva_g.addEventListener("change", function (event) {
+          console.log(event.target.value);
+          acceleration = parseFloat(event.target.value);
+          if (!acceleration) {
+            acceleration = 10;
+          }
+        });
+        document.getElementById("submit-gva").onclick = function () {
           moveY = -2.3;
           timeSecond = 0;
-          acceleration = 10;
           moveFunc = verticalMove;
-        });
-        moveFunc = verticalMove;
+        };
+
         break;
 
       case "gp":
@@ -232,7 +241,7 @@ function init() {
         const gp_vo = document.getElementById("vop");
         const gp_theta_to_x = document.getElementById("thetap");
         const gp_gravitasip = document.getElementById("gravitasip");
-   
+
         gp_vo.addEventListener("change", function (event) {
           movespeed = parseFloat(event.target.value); // Set default jika input kosong
           console.log(movespeed);
@@ -241,7 +250,7 @@ function init() {
           }
         });
         gp_theta_to_x.addEventListener("change", function (event) {
-          anglex = parseFloat(event.target.value) ; // Set default jika input kosong
+          anglex = parseFloat(event.target.value); // Set default jika input kosong
           console.log(anglex);
           if (!anglex) {
             anglex = 45;
@@ -249,7 +258,7 @@ function init() {
         });
 
         gp_gravitasip.addEventListener("change", function (event) {
-          acceleration = parseFloat(event.target.value) ; // Set default jika input kosong
+          acceleration = parseFloat(event.target.value); // Set default jika input kosong
           console.log(acceleration);
           if (!acceleration) {
             acceleration = 10;
@@ -258,7 +267,17 @@ function init() {
 
         document.getElementById("jumpgp").onclick = function () {
           timeSecond = 0;
-          moveFunc = (theta, moveX, moveY, moveZ, movespeed, angle, acceleration, timeSecond, anglex) => {
+          moveFunc = (
+            theta,
+            moveX,
+            moveY,
+            moveZ,
+            movespeed,
+            angle,
+            acceleration,
+            timeSecond,
+            anglex,
+          ) => {
             return parabolaMove(
               theta,
               moveX,
@@ -268,13 +287,23 @@ function init() {
               angle,
               acceleration,
               timeSecond,
-              anglex
-          );
+              anglex,
+            );
+          };
         };
-        };
-    
+
         timeSecond = 0;
-        moveFunc = (theta, moveX, moveY, moveZ, movespeed, angle, acceleration, timeSecond, anglex) => {
+        moveFunc = (
+          theta,
+          moveX,
+          moveY,
+          moveZ,
+          movespeed,
+          angle,
+          acceleration,
+          timeSecond,
+          anglex,
+        ) => {
           return parabolaMove(
             theta,
             moveX,
@@ -284,45 +313,42 @@ function init() {
             angle,
             acceleration,
             timeSecond,
-            anglex
+            anglex,
           );
         };
         break;
 
-        case "gff":
-          glb.setAttribute("hidden", true);
-          glbb.setAttribute("hidden", true);
-          gp.setAttribute("hidden", true);
-          gva.setAttribute("hidden", true);
-          gff.removeAttribute("hidden");
-          const gff_v = document.getElementById("voff");
-          gff_v.addEventListener("change", function (event) {
-            console.log(event.target.value);
-            movespeed = parseFloat(event.target.value);
-            if (!movespeed) {
-              movespeed = 10;
-            }
-          });
-          const gff_g = document.getElementById("gravitasiff");
-          gff_g.addEventListener("change", function (event) {
-            console.log(event.target.value);
-            acceleration = parseFloat(event.target.value);
-            if (!acceleration) {
-              acceleration = 10;
-            }
-            moveY = 8;
-            timeSecond = 0;
-          });
-          document.getElementById("endlessff").onclick = function () {
-            if (toggleff){
-              toggleff = false;
-            } else if (!toggleff){
-              toggleff = true;
-            };
-            moveFunc = FreeFallMoveMove;
-          };
+      case "gff":
+        glb.setAttribute("hidden", true);
+        glbb.setAttribute("hidden", true);
+        gp.setAttribute("hidden", true);
+        gva.setAttribute("hidden", true);
+        gff.removeAttribute("hidden");
+        const gff_h = document.getElementById("hoff");
+
+        let h = 0;
+        gff_h.addEventListener("change", function (event) {
+          console.log(event.target.value);
+          h = parseFloat(event.target.value);
+          if (!moveY) {
+            h = 10;
+          }
+        });
+        const gff_g = document.getElementById("gravitasiff");
+        gff_g.addEventListener("change", function (event) {
+          console.log(event.target.value);
+          acceleration = parseFloat(event.target.value);
+          if (!acceleration) {
+            acceleration = 10;
+          }
+          timeSecond = 0;
+        });
+        document.getElementById("submit-gff").onclick = function () {
+          moveY = h - 2.4;
           moveFunc = FreeFallMoveMove;
-          break;
+        };
+        // moveFunc = FreeFallMoveMove;
+        break;
     }
   });
 
@@ -374,7 +400,6 @@ function render() {
       acceleration,
       timeSecond,
       anglex,
-      toggleff
     );
     theta = move.theta;
     moveX = move.moveX;

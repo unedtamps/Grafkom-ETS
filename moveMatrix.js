@@ -20,6 +20,8 @@ function uniformStrightMove(
     (currentMove - prevMove) /
     0.015
   ).toFixed(2);
+  document.getElementById("s-value").innerText = currentMove.toFixed(2);
+
   return {
     theta,
     angle,
@@ -53,6 +55,8 @@ function constantAcceleration(
     (calcuate - prevmove) /
     0.015
   ).toFixed(2);
+
+  document.getElementById("s-value").innerText = calcuate.toFixed(2);
   return {
     theta,
     angle,
@@ -88,7 +92,7 @@ function verticalMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time) {
     moveY,
     moveZ,
     movespeed,
-  }; 
+  };
 }
 
 function parabolaMove(
@@ -100,7 +104,7 @@ function parabolaMove(
   angle,
   acc,
   time,
-  anglex
+  anglex,
   //theta,
   //moveX,
   //moveY,
@@ -111,7 +115,6 @@ function parabolaMove(
   //time,
   //g = 9.8 // Gravitasi default
 ) {
-
   // Konversi sudut ke radian
   let thetaRad = (anglex * Math.PI) / 180;
 
@@ -125,7 +128,8 @@ function parabolaMove(
   moveX = moveX + (currentMoveX - prevMoveX);
 
   // Posisi vertikal (y)
-  var prevMoveY = velocityY * (time - 0.01) - 0.5 * acc * Math.pow(time - 0.01, 2);
+  var prevMoveY =
+    velocityY * (time - 0.01) - 0.5 * acc * Math.pow(time - 0.01, 2);
   var currentMoveY = velocityY * time - 0.5 * acc * Math.pow(time, 2);
   moveY = moveY + (currentMoveY - prevMoveY);
 
@@ -147,6 +151,7 @@ function parabolaMove(
     0.015
   ).toFixed(2);
   document.getElementById("h-value").innerText = currentMoveY.toFixed(2);
+  document.getElementById("s-value").innerText = currentMoveX.toFixed(2);
   return {
     theta,
     angle,
@@ -154,34 +159,39 @@ function parabolaMove(
     moveY,
     moveZ,
     movespeed,
-    anglex
+    anglex,
   };
 }
 
-function FreeFallMoveMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time, anglex, toggleff) {
+function FreeFallMoveMove(
+  theta,
+  moveX,
+  moveY,
+  moveZ,
+  movespeed,
+  angle,
+  acc,
+  time,
+) {
   theta += 0.005;
-  moveY = 10;
-  var prevMove = movespeed * (time - 0.015) - acc * Math.pow(time - 0.015, 2);
-  var currentMove = movespeed * time - acc * Math.pow(time, 2);
-  moveY = moveY + (currentMove - prevMove);
-  angle += 5;
-  document.getElementById("v-value").innerText = (
-    (currentMove - prevMove) /
-    0.015
-  ).toFixed(2);
+
   if (moveY <= -2.4) {
     time = 0;
     moveY = -2.4;
     movespeed = 0;
-    prevMove = 0;
-    currentMove = 0;
+    acc = 0;
   }
-  //if (toggleff){  
-  //  if (moveY > -2.3) {
-  //    moveY = 10;
-  //  };
-  //};
-  document.getElementById("h-value").innerText = currentMove.toFixed(2);
+  var prevMove = -acc * Math.pow(time - 0.015, 2);
+  var currentMove = -acc * Math.pow(time, 2);
+  moveY = moveY + (currentMove - prevMove);
+  angle += 5;
+
+  document.getElementById("v-value").innerText = (
+    (currentMove - prevMove) /
+    0.015
+  ).toFixed(2);
+  document.getElementById("h-value").innerText = (moveY + 2.4).toFixed(2);
+
   return {
     theta,
     angle,
@@ -189,6 +199,6 @@ function FreeFallMoveMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, tim
     moveY,
     moveZ,
     movespeed,
-    toggleff
-  }; 
+    toggleff,
+  };
 }

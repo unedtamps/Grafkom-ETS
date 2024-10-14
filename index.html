@@ -8,10 +8,11 @@
   </head>
   <body>
     <canvas id="gl-canvas" height="512"> </canvas>
-    
+
     <div class="status-container">
       <p>⚡ Velocity : <span id="v-value">0</span></p>
       <p>📏 Height : <span id="h-value">0</span></p>
+      <p>🚙 Distance : <span id="s-value">0</span></p>
     </div>
 
     <div class="container">
@@ -56,12 +57,15 @@
       <div id="gva-input" hidden class="input-group">
         <label for="gva-v">Velocity</label>
         <input id="gva-v" type="text" class="input-field" />
+        <label for="gva-g">Gravity </label>
+        <input id="gva-g" type="text" class="input-field" />
+        <button type="button" id="submit-gva" class="btn">Ok</button>
       </div>
-      
+
       <div id="parabola-input" hidden class="input-group">
         <label for="vop">Starting Velocity:</label>
         <input id="vop" type="text" class="input-field" />
-      
+
         <label for="thetap">Angle from X-axis:</label>
         <input id="thetap" type="text" class="input-field" />
 
@@ -72,14 +76,14 @@
       </div>
 
       <div id="freefall-input" hidden class="input-group">
-        <label for="voff">Kecepatan Awal :</label>
-        <input id="voff" type="text" class="input-field" />
-      
-        <label for="gravitasiff">Gravitasi :</label>
+        <label for="hoff">Max Height</label>
+        <input id="hoff" type="text" class="input-field" />
+
+        <label for="gravitasiff">Gravity</label>
         <input id="gravitasiff" type="text" class="input-field" />
-        <button type="button" id="endlessff" class="btn">Endless</button>
+
+        <button type="button" id="submit-gff" class="btn">Ok</button>
       </div>
-      
 
       <button type="button" id="toggle" class="btn">Start</button>
       <button type="button" id="reset" class="btn btn-reset">Reset</button>

@@ -20,6 +20,8 @@ let timeSecond = 0;
 let timeprev = new Date().getTime();
 let force = 0;
 let mass = 10000;
+let anglex = 45; //angle terhadap sumbu x
+var toggleff = false;
 
 //move
 let moveX = -6.5;
@@ -56,6 +58,8 @@ var move = uniformStrightMove(
   angle,
   acceleration,
   timeSecond,
+  anglex,
+  toggleff
 );
 console.log(move);
 var moveFunc = uniformStrightMove;
@@ -137,16 +141,16 @@ function init() {
   let glb = document.getElementById("glb-input");
   let gva = document.getElementById("gva-input");
   let glbb = document.getElementById("glbb-input");
-  let gvb = document.getElementById("gvb-input");
   let gp = document.getElementById("parabola-input");
+  let gff = document.getElementById("freefall-input");
   selectMove.addEventListener("change", function () {
     switch (this.value) {
       case "glb":
         gva.setAttribute("hidden", true);
         gp.setAttribute("hidden", true);
         glbb.setAttribute("hidden", true);
+        gff.setAttribute("hidden", true);
         glb.removeAttribute("hidden");
-        glbb.setAttribute("hidden", true);
         const glb_v = document.getElementById("glb-v");
         glb_v.addEventListener("change", function (event) {
           console.log(event.target.value);
@@ -162,6 +166,7 @@ function init() {
         glb.setAttribute("hidden", true);
         gva.setAttribute("hidden", true);
         gp.setAttribute("hidden", true);
+        gff.setAttribute("hidden", true);
         glbb.removeAttribute("hidden");
         var mass = 1;
         var force = 4;
@@ -201,6 +206,7 @@ function init() {
         glb.setAttribute("hidden", true);
         glbb.setAttribute("hidden", true);
         gp.setAttribute("hidden", true);
+        gff.setAttribute("hidden", true);
         gva.removeAttribute("hidden");
         const gva_v = document.getElementById("gva-v");
         gva_v.addEventListener("change", function (event) {
@@ -221,32 +227,102 @@ function init() {
         glb.setAttribute("hidden", true);
         glbb.setAttribute("hidden", true);
         gva.setAttribute("hidden", true);
+        gff.setAttribute("hidden", true);
         gp.removeAttribute("hidden");
-        const parabolaInputX = document.getElementById("gp-vx");
-        const parabolaInputY = document.getElementById("gp-vy");
+        const gp_vo = document.getElementById("vop");
+        const gp_theta_to_x = document.getElementById("thetap");
+        const gp_gravitasip = document.getElementById("gravitasip");
    
-        parabolaInputX.addEventListener("change", function (event) {
-          movespeed = parseFloat(event.target.value) || 10; // Set default jika input kosong
+        gp_vo.addEventListener("change", function (event) {
+          movespeed = parseFloat(event.target.value); // Set default jika input kosong
+          console.log(movespeed);
+          if (!movespeed) {
+            movespeed = 15;
+          }
         });
-        parabolaInputY.addEventListener("change", function (event) {
-          direction = parseFloat(event.target.value) || 50; // Set default jika input kosong
+        gp_theta_to_x.addEventListener("change", function (event) {
+          anglex = parseFloat(event.target.value) ; // Set default jika input kosong
+          console.log(anglex);
+          if (!anglex) {
+            anglex = 45;
+          }
         });
+
+        gp_gravitasip.addEventListener("change", function (event) {
+          acceleration = parseFloat(event.target.value) ; // Set default jika input kosong
+          console.log(acceleration);
+          if (!acceleration) {
+            acceleration = 10;
+          }
+        });
+
+        document.getElementById("jumpgp").onclick = function () {
+          timeSecond = 0;
+          moveFunc = (theta, moveX, moveY, moveZ, movespeed, angle, acceleration, timeSecond, anglex) => {
+            return parabolaMove(
+              theta,
+              moveX,
+              moveY,
+              moveZ,
+              movespeed,
+              angle,
+              acceleration,
+              timeSecond,
+              anglex
+          );
+        };
+        };
     
         timeSecond = 0;
-        moveFunc = (theta, moveX, moveY, moveZ, movespeed, direction, angle, timeSecond) => {
+        moveFunc = (theta, moveX, moveY, moveZ, movespeed, angle, acceleration, timeSecond, anglex) => {
           return parabolaMove(
             theta,
             moveX,
             moveY,
             moveZ,
-            velocityX,
-            velocityY,
+            movespeed,
+            angle,
             acceleration,
-            timeSecond
+            timeSecond,
+            anglex
           );
         };
-        
         break;
+
+        case "gff":
+          glb.setAttribute("hidden", true);
+          glbb.setAttribute("hidden", true);
+          gp.setAttribute("hidden", true);
+          gva.setAttribute("hidden", true);
+          gff.removeAttribute("hidden");
+          const gff_v = document.getElementById("voff");
+          gff_v.addEventListener("change", function (event) {
+            console.log(event.target.value);
+            movespeed = parseFloat(event.target.value);
+            if (!movespeed) {
+              movespeed = 10;
+            }
+          });
+          const gff_g = document.getElementById("gravitasiff");
+          gff_g.addEventListener("change", function (event) {
+            console.log(event.target.value);
+            acceleration = parseFloat(event.target.value);
+            if (!acceleration) {
+              acceleration = 10;
+            }
+            moveY = 8;
+            timeSecond = 0;
+          });
+          document.getElementById("endlessff").onclick = function () {
+            if (toggleff){
+              toggleff = false;
+            } else if (!toggleff){
+              toggleff = true;
+            };
+            moveFunc = FreeFallMoveMove;
+          };
+          moveFunc = FreeFallMoveMove;
+          break;
     }
   });
 
@@ -297,6 +373,8 @@ function render() {
       angle,
       acceleration,
       timeSecond,
+      anglex,
+      toggleff
     );
     theta = move.theta;
     moveX = move.moveX;

@@ -96,46 +96,99 @@ function parabolaMove(
   moveX,
   moveY,
   moveZ,
-  velocityX,
-  velocityY,
+  movespeed,
+  angle,
   acc,
   time,
-  g = 9.8 // Gravitasi default
+  anglex
+  //theta,
+  //moveX,
+  //moveY,
+  //moveZ,
+  //velocityX,
+  //velocityY,
+  //acc,
+  //time,
+  //g = 9.8 // Gravitasi default
 ) {
+
+  // Konversi sudut ke radian
+  let thetaRad = (anglex * Math.PI) / 180;
+
+  // Hitung komponen kecepatan
+  velocityX = movespeed * Math.cos(thetaRad);
+  velocityY = movespeed * Math.sin(thetaRad);
+
   // Posisi horizontal (x)
   var prevMoveX = velocityX * (time - 0.01);
   var currentMoveX = velocityX * time;
   moveX = moveX + (currentMoveX - prevMoveX);
 
   // Posisi vertikal (y)
-  var prevMoveY = velocityY * (time - 0.01) - 0.5 * g * Math.pow(time - 0.01, 2);
-  var currentMoveY = velocityY * time - 0.5 * g * Math.pow(time, 2);
+  var prevMoveY = velocityY * (time - 0.01) - 0.5 * acc * Math.pow(time - 0.01, 2);
+  var currentMoveY = velocityY * time - 0.5 * acc * Math.pow(time, 2);
   moveY = moveY + (currentMoveY - prevMoveY);
 
   theta += 0.05;
   angle += 5;
 
-  // Deteksi ketika objek jatuh ke tanah 
   if (moveY <= -2.4) {
-    moveY = -2.4;
-    time = 0; 
-    velocityY = 0; 
+    moveY = -2.4; // Batas tanah
+    time = 0; // Reset waktu
+    velocityY = 0; // Reset kecepatan vertikal setelah jatuh
+    currentMoveY = 0;
+    prevMoveY = 0;
   }
-
-  // Update nilai kecepatan yang ditampilkan di elemen HTML
+  if (moveX > 11) {
+    moveX = -11;
+  }
   document.getElementById("v-value").innerText = (
-    (currentMoveY - prevMoveY) / 0.01
+    (currentMoveX - prevMoveX) /
+    0.015
   ).toFixed(2);
-
+  document.getElementById("h-value").innerText = currentMoveY.toFixed(2);
   return {
     theta,
     angle,
-    direction,
     moveX,
     moveY,
     moveZ,
-    velocityX,
-    velocityY
+    movespeed,
+    anglex
   };
 }
 
+function FreeFallMoveMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time, anglex, toggleff) {
+  theta += 0.005;
+  moveY = 10;
+  var prevMove = movespeed * (time - 0.015) - acc * Math.pow(time - 0.015, 2);
+  var currentMove = movespeed * time - acc * Math.pow(time, 2);
+  moveY = moveY + (currentMove - prevMove);
+  angle += 5;
+  document.getElementById("v-value").innerText = (
+    (currentMove - prevMove) /
+    0.015
+  ).toFixed(2);
+  if (moveY <= -2.4) {
+    time = 0;
+    moveY = -2.4;
+    movespeed = 0;
+    prevMove = 0;
+    currentMove = 0;
+  }
+  //if (toggleff){  
+  //  if (moveY > -2.3) {
+  //    moveY = 10;
+  //  };
+  //};
+  document.getElementById("h-value").innerText = currentMove.toFixed(2);
+  return {
+    theta,
+    angle,
+    moveX,
+    moveY,
+    moveZ,
+    movespeed,
+    toggleff
+  }; 
+}

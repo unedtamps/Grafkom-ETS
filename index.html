@@ -34,6 +34,7 @@
           <option value="glbb">Uniform Rectilinear Motion</option>
           <option value="gva">Vertical Motion</option>
           <option value="gp">Parabole Motion</option>
+          <option value="gff">Free Fall Motion</option>
         </select>
       </div>
 
@@ -58,11 +59,27 @@
       </div>
       
       <div id="parabola-input" hidden class="input-group">
-        <label for="gp-vx">Kecepatan Horizontal (vx):</label>
-        <input id="gp-vx" type="text" />
-        <label for="gp-vy">Kecepatan Vertikal (vy):</label>
-        <input id="gp-vy" type="text" />
+        <label for="vop">Starting Velocity:</label>
+        <input id="vop" type="text" class="input-field" />
+      
+        <label for="thetap">Angle from X-axis:</label>
+        <input id="thetap" type="text" class="input-field" />
+
+        <label for="gravitasip">Gravitation:</label>
+        <input id="gravitasip" type="text" class="input-field" />
+
+        <button type="button" id="jumpgp" class="btn">Jump</button>
       </div>
+
+      <div id="freefall-input" hidden class="input-group">
+        <label for="voff">Kecepatan Awal :</label>
+        <input id="voff" type="text" class="input-field" />
+      
+        <label for="gravitasiff">Gravitasi :</label>
+        <input id="gravitasiff" type="text" class="input-field" />
+        <button type="button" id="endlessff" class="btn">Endless</button>
+      </div>
+      
 
       <button type="button" id="toggle" class="btn">Start</button>
       <button type="button" id="reset" class="btn btn-reset">Reset</button>

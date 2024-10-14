@@ -33,6 +33,7 @@
           <option value="glb">Uniform Straight Motion</option>
           <option value="glbb">Uniform Rectilinear Motion</option>
           <option value="gva">Vertical Motion</option>
+          <option value="gp">Parabole Motion</option>
         </select>
       </div>
 
@@ -54,6 +55,13 @@
       <div id="gva-input" hidden class="input-group">
         <label for="gva-v">Velocity</label>
         <input id="gva-v" type="text" class="input-field" />
+      </div>
+      
+      <div id="parabola-input" hidden class="input-group">
+        <label for="gp-vx">Kecepatan Horizontal (vx):</label>
+        <input id="gp-vx" type="text" />
+        <label for="gp-vy">Kecepatan Vertikal (vy):</label>
+        <input id="gp-vy" type="text" />
       </div>
 
       <button type="button" id="toggle" class="btn">Start</button>

@@ -88,5 +88,54 @@ function verticalMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time) {
     moveY,
     moveZ,
     movespeed,
+  }; 
+}
+
+function parabolaMove(
+  theta,
+  moveX,
+  moveY,
+  moveZ,
+  velocityX,
+  velocityY,
+  acc,
+  time,
+  g = 9.8 // Gravitasi default
+) {
+  // Posisi horizontal (x)
+  var prevMoveX = velocityX * (time - 0.01);
+  var currentMoveX = velocityX * time;
+  moveX = moveX + (currentMoveX - prevMoveX);
+
+  // Posisi vertikal (y)
+  var prevMoveY = velocityY * (time - 0.01) - 0.5 * g * Math.pow(time - 0.01, 2);
+  var currentMoveY = velocityY * time - 0.5 * g * Math.pow(time, 2);
+  moveY = moveY + (currentMoveY - prevMoveY);
+
+  theta += 0.05;
+  angle += 5;
+
+  // Deteksi ketika objek jatuh ke tanah 
+  if (moveY <= -2.4) {
+    moveY = -2.4;
+    time = 0; 
+    velocityY = 0; 
+  }
+
+  // Update nilai kecepatan yang ditampilkan di elemen HTML
+  document.getElementById("v-value").innerText = (
+    (currentMoveY - prevMoveY) / 0.01
+  ).toFixed(2);
+
+  return {
+    theta,
+    angle,
+    direction,
+    moveX,
+    moveY,
+    moveZ,
+    velocityX,
+    velocityY
   };
 }
+

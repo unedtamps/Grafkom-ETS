@@ -138,10 +138,13 @@ function init() {
   let gva = document.getElementById("gva-input");
   let glbb = document.getElementById("glbb-input");
   let gvb = document.getElementById("gvb-input");
+  let gp = document.getElementById("parabola-input");
   selectMove.addEventListener("change", function () {
     switch (this.value) {
       case "glb":
         gva.setAttribute("hidden", true);
+        gp.setAttribute("hidden", true);
+        glbb.setAttribute("hidden", true);
         glb.removeAttribute("hidden");
         glbb.setAttribute("hidden", true);
         const glb_v = document.getElementById("glb-v");
@@ -158,7 +161,7 @@ function init() {
       case "glbb":
         glb.setAttribute("hidden", true);
         gva.setAttribute("hidden", true);
-
+        gp.setAttribute("hidden", true);
         glbb.removeAttribute("hidden");
         var mass = 1;
         var force = 4;
@@ -197,6 +200,7 @@ function init() {
       case "gva":
         glb.setAttribute("hidden", true);
         glbb.setAttribute("hidden", true);
+        gp.setAttribute("hidden", true);
         gva.removeAttribute("hidden");
         const gva_v = document.getElementById("gva-v");
         gva_v.addEventListener("change", function (event) {
@@ -211,6 +215,37 @@ function init() {
           moveFunc = verticalMove;
         });
         moveFunc = verticalMove;
+        break;
+
+      case "gp":
+        glb.setAttribute("hidden", true);
+        glbb.setAttribute("hidden", true);
+        gva.setAttribute("hidden", true);
+        gp.removeAttribute("hidden");
+        const parabolaInputX = document.getElementById("gp-vx");
+        const parabolaInputY = document.getElementById("gp-vy");
+   
+        parabolaInputX.addEventListener("change", function (event) {
+          movespeed = parseFloat(event.target.value) || 10; // Set default jika input kosong
+        });
+        parabolaInputY.addEventListener("change", function (event) {
+          direction = parseFloat(event.target.value) || 50; // Set default jika input kosong
+        });
+    
+        timeSecond = 0;
+        moveFunc = (theta, moveX, moveY, moveZ, movespeed, direction, angle, timeSecond) => {
+          return parabolaMove(
+            theta,
+            moveX,
+            moveY,
+            moveZ,
+            velocityX,
+            velocityY,
+            acceleration,
+            timeSecond
+          );
+        };
+        
         break;
     }
   });

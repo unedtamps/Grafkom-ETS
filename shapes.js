@@ -178,6 +178,78 @@ function createPrism() {
   return { positions, colors };
 }
 
+function createCylinder() {
+  var CYLINDER_DIV = 40; // Lower divisions to make debugging easier
+  var i, ai, si, ci;
+  var vertices = [], indices = [];
+
+  var height = 2.0; // Height of the cylinder
+  var radius = 1.0; // Radius of the cylinder
+
+  // Top circle center (north pole equivalent)
+  vertices.push(vec4(0, height / 2, 0, 1.0)); // Top center vertex
+
+  // Generate vertices for the top circle
+  for (i = 0; i <= CYLINDER_DIV; i++) {
+    ai = (i * 2 * Math.PI) / CYLINDER_DIV;
+    si = Math.sin(ai);
+    ci = Math.cos(ai);
+    vertices.push(vec4(radius * ci, height / 2, radius * si, 1.0));
+  }
+
+  // Bottom circle center (south pole equivalent)
+  vertices.push(vec4(0, -height / 2, 0, 1.0)); // Bottom center vertex
+
+  // Generate vertices for the bottom circle
+  for (i = 0; i <= CYLINDER_DIV; i++) {
+    ai = (i * 2 * Math.PI) / CYLINDER_DIV;
+    si = Math.sin(ai);
+    ci = Math.cos(ai);
+    vertices.push(vec4(radius * ci, -height / 2, radius * si, 1.0));
+  }
+
+  // Top circle indices (fan from top center)
+  for (i = 1; i <= CYLINDER_DIV; i++) {
+    indices.push(0, i, i + 1); // Connect top center to top circle vertices
+  }
+
+  // Body of the cylinder (connecting top and bottom circles)
+  var bottomCircleOffset = CYLINDER_DIV + 2;
+  for (i = 1; i <= CYLINDER_DIV; i++) {
+    var p1 = i; // Top circle vertex
+    var p2 = bottomCircleOffset + i; // Corresponding bottom circle vertex
+
+    indices.push(p1, p2, p1 + 1);
+    indices.push(p1 + 1, p2, p2 + 1);
+  }
+
+  // Bottom circle indices (fan from bottom center)
+  var bottomCenterIndex = bottomCircleOffset - 1;
+  for (i = bottomCircleOffset; i < vertices.length - 1; i++) {
+    indices.push(bottomCenterIndex, i, i + 1); // Connect bottom center to bottom circle vertices
+  }
+
+  // Optional color generation logic
+  var vertexColors = [
+    vec4(1.0, 0.0, 0.0, 1.0), // Red
+    vec4(0.0, 1.0, 0.0, 1.0), // Green
+  ];
+
+  let positions = [];
+  let colors = [];
+  const colorChangeInterval = indices.length / 2;
+
+  for (let i = 0; i < indices.length; i++) {
+    const index = indices[i];
+    positions.push(vertices[index]);
+    const colorIndex =
+      Math.floor(i / colorChangeInterval) % vertexColors.length;
+    colors.push(vertexColors[colorIndex]);
+  }
+
+  return { positions, colors };
+}
+
 function createCube() {
   var scale = 2;
   var vertices = [

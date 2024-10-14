@@ -122,6 +122,11 @@ function init() {
         shape = createPrism();
         createBuffer(gl, program);
         break;
+      case "cylinder":
+        console.log("cylinder");
+        shape = createCylinder();
+        createBuffer(gl, program);
+        break;
       case "cube":
         console.log("cube");
         shape = createCube();

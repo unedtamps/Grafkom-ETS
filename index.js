@@ -48,6 +48,8 @@ var aspect;
 
 var axis = 0;
 var theta = 0.0;
+var thetajump = 0.01;
+var anglejump = 5;
 
 var thetaLoc;
 
@@ -402,6 +404,8 @@ function init() {
     moveX = -6.5;
     moveY = -2.4;
     moveZ = -1;
+    thetajump = 0;
+    anglejump = 0;
     document.getElementById("toggle").innerText = "Start";
     timeSecond = 0;
   };
@@ -425,6 +429,14 @@ function init() {
       initMovex = moveX * 2;
       console.log(moveZ, moveY);
     }
+  });
+  document.getElementById("i-rotate").addEventListener("click", function () {
+    thetajump += 0.01;
+    anglejump += 1;
+  });
+  document.getElementById("d-rotate").addEventListener("click", function () {
+    thetajump -= 0.01;
+    anglejump -= 1;
   });
 
   viewMatrixLocation = gl.getUniformLocation(program, "uViewMatrix");
@@ -466,8 +478,8 @@ function render() {
     angle = move.angle;
     movespeed = move.movespeed;
   } else {
-    theta += 0.01;
-    angle += 2;
+    theta += thetajump;
+    angle += anglejump;
   }
 
   const target = vec3(0.0, 0.0, 0.0); // Look at the center (the object)

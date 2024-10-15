@@ -10,9 +10,9 @@ function uniformStrightMove(
 ) {
   var prevMove = movespeed * (time - 0.015);
   var currentMove = movespeed * time;
-  theta += 0.005;
+  theta += thetajump;
   moveX = moveX + (currentMove - prevMove);
-  angle += 5;
+  angle += anglejump;
   if (moveX > -initMovex) {
     moveX = initMovex;
   }
@@ -44,10 +44,10 @@ function constantAcceleration(
 ) {
   console.log(acc);
   var prevmove = movespeed * (time - 0.015) + acc * Math.pow(time - 0.015, 2);
-  theta += 0.005;
+  theta += thetajump;
   var calcuate = movespeed * time + acc * Math.pow(time, 2);
   moveX = moveX + (calcuate - prevmove);
-  angle += 5;
+  angle += anglejump;
   if (moveX > -initMovex) {
     moveX = initMovex;
   }
@@ -75,11 +75,11 @@ function verticalMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time) {
     acc = 0;
     movespeed = 0;
   }
-  theta += 0.005;
+  theta += thetajump;
   var prevMove = movespeed * (time - 0.015) - acc * Math.pow(time - 0.015, 2);
   var currentMove = movespeed * time - acc * Math.pow(time, 2);
   moveY = moveY + (currentMove - prevMove);
-  angle += 5;
+  angle += anglejump;
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /
     0.015
@@ -124,8 +124,8 @@ function parabolaMove(
   var currentMoveY = velocityY * time - 0.5 * acc * Math.pow(time, 2);
   moveY = moveY + (currentMoveY - prevMoveY);
 
-  theta += 0.05;
-  angle += 5;
+  theta += thetajump;
+  angle += anglejump;
 
   if (moveY <= initMoveY) {
     moveY = initMoveY; // Batas tanah
@@ -164,7 +164,7 @@ function FreeFallMoveMove(
   acc,
   time,
 ) {
-  theta += 0.005;
+  theta += thetajump;
   console.log(initMoveY);
 
   if (moveY <= initMoveY) {
@@ -176,7 +176,7 @@ function FreeFallMoveMove(
   var prevMove = -acc * Math.pow(time - 0.015, 2);
   var currentMove = -acc * Math.pow(time, 2);
   moveY = moveY + (currentMove - prevMove);
-  angle += 5;
+  angle += anglejump;
 
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /

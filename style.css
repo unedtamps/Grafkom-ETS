@@ -80,6 +80,31 @@ label {
   background-color: #dc3545;
 }
 
+.zoom-in {
+  background-color: #4CAF50;
+  /* Green */
+}
+
+.zoom-out {
+  background-color: #FF5722;
+  /* Orange */
+}
+
+.toggle {
+  background-color: #9C27B0;
+  /* Purple */
+}
+
+.rotate-right {
+  background-color: #2196F3;
+  /* Blue */
+}
+
+.rotate-left {
+  background-color: #FFC107;
+  /* Amber */
+}
+
 .btn-reset:hover {
   background-color: #c82333;
 }

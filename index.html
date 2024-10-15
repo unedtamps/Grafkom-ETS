@@ -86,8 +86,11 @@
         <button type="button" id="submit-gff" class="btn">Ok</button>
       </div>
 
+      <button type="button" id="zoom-i" class="btn">Zoom in</button>
+      <button type="button" id="zoom-o" class="btn">Zoom out</button>
       <button type="button" id="toggle" class="btn">Start</button>
       <button type="button" id="reset" class="btn btn-reset">Reset</button>
+      <button type="button" id="colorButton" class="btn">Change Color</button>
     </div>
 
     <script id="vertex-shader" type="x-shader/x-vertex">
@@ -108,7 +111,6 @@
           vColor = aColor;
 
           gl_Position = uProjectionMatrix * uMoveMatrix * uRotateMatrix  * uViewMatrix   * aPosition;
-          gl_Position.z = -gl_Position.z;
       }
     </script>
 

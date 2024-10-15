@@ -107,11 +107,10 @@ function createDeca() {
   return { positions, colors };
 }
 
-function quad(a, b, c, d, vertices, vertexColors) {
+function quad(a, b, c, d, vertices, vertexColors, indexColor) {
   const indicies = [a, b, c, a, c, d];
   var positions = [];
   var colors = [];
-  var indexColor = Math.round(Math.random() * (vertexColors.length - 1));
   for (let i = 0; i < indicies.length; i++) {
     positions.push(vertices[indicies[i]]);
     colors.push(vertexColors[indexColor]);
@@ -152,12 +151,17 @@ function createPrism() {
     vec4(0.5, 0.0, 1.0, 1.0), // violet
   ];
 
-  const f1 = quad(0, 1, 4, 4, vertices, vertexColors);
-  const f2 = quad(1, 2, 4, 4, vertices, vertexColors);
-  const f3 = quad(2, 3, 4, 4, vertices, vertexColors);
-  const f4 = quad(3, 0, 4, 4, vertices, vertexColors);
+  vertexColors = vertexColors
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
 
-  const bottomFace = quad(0, 1, 2, 3, vertices, vertexColors);
+  const f1 = quad(0, 1, 4, 4, vertices, vertexColors, 1);
+  const f2 = quad(1, 2, 4, 4, vertices, vertexColors, 2);
+  const f3 = quad(2, 3, 4, 4, vertices, vertexColors, 3);
+  const f4 = quad(3, 0, 4, 4, vertices, vertexColors, 4);
+
+  const bottomFace = quad(0, 1, 2, 3, vertices, vertexColors, 5);
 
   const positions = [
     ...f1.positions,
@@ -181,7 +185,8 @@ function createPrism() {
 function createCylinder() {
   var CYLINDER_DIV = 40; // Lower divisions to make debugging easier
   var i, ai, si, ci;
-  var vertices = [], indices = [];
+  var vertices = [],
+    indices = [];
 
   var height = 2.0; // Height of the cylinder
   var radius = 1.0; // Radius of the cylinder
@@ -286,12 +291,17 @@ function createCube() {
     vec4(0.5, 0.0, 1.0, 1.0), // violet
   ];
 
-  const f1 = quad(1, 0, 3, 2, vertices, vertexColors);
-  const f2 = quad(2, 3, 7, 6, vertices, vertexColors);
-  const f3 = quad(3, 0, 4, 7, vertices, vertexColors);
-  const f4 = quad(6, 5, 1, 2, vertices, vertexColors);
-  const f5 = quad(4, 5, 6, 7, vertices, vertexColors);
-  const f6 = quad(5, 4, 0, 1, vertices, vertexColors);
+  vertexColors = vertexColors
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+
+  const f1 = quad(1, 0, 3, 2, vertices, vertexColors, 1);
+  const f2 = quad(2, 3, 7, 6, vertices, vertexColors, 2);
+  const f3 = quad(3, 0, 4, 7, vertices, vertexColors, 3);
+  const f4 = quad(6, 5, 1, 2, vertices, vertexColors, 3);
+  const f5 = quad(4, 5, 6, 7, vertices, vertexColors, 4);
+  const f6 = quad(5, 4, 0, 1, vertices, vertexColors, 5);
 
   const positions = [
     ...f1.positions,

@@ -13,8 +13,8 @@ function uniformStrightMove(
   theta += 0.005;
   moveX = moveX + (currentMove - prevMove);
   angle += 5;
-  if (moveX > 11) {
-    moveX = -11;
+  if (moveX > -initMovex) {
+    moveX = initMovex;
   }
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /
@@ -48,8 +48,8 @@ function constantAcceleration(
   var calcuate = movespeed * time + acc * Math.pow(time, 2);
   moveX = moveX + (calcuate - prevmove);
   angle += 5;
-  if (moveX > 11) {
-    moveX = -11;
+  if (moveX > -initMovex) {
+    moveX = initMovex;
   }
   document.getElementById("v-value").innerText = (
     (calcuate - prevmove) /
@@ -68,10 +68,10 @@ function constantAcceleration(
 }
 
 function verticalMove(theta, moveX, moveY, moveZ, movespeed, angle, acc, time) {
-  if (moveY <= -2.4) {
+  if (moveY <= initMoveY) {
     time = 0;
     acc = 0;
-    moveY = -2.4;
+    moveY = initMoveY;
     acc = 0;
     movespeed = 0;
   }
@@ -105,15 +105,6 @@ function parabolaMove(
   acc,
   time,
   anglex,
-  //theta,
-  //moveX,
-  //moveY,
-  //moveZ,
-  //velocityX,
-  //velocityY,
-  //acc,
-  //time,
-  //g = 9.8 // Gravitasi default
 ) {
   // Konversi sudut ke radian
   let thetaRad = (anglex * Math.PI) / 180;
@@ -136,15 +127,15 @@ function parabolaMove(
   theta += 0.05;
   angle += 5;
 
-  if (moveY <= -2.4) {
-    moveY = -2.4; // Batas tanah
+  if (moveY <= initMoveY) {
+    moveY = initMoveY; // Batas tanah
     time = 0; // Reset waktu
     velocityY = 0; // Reset kecepatan vertikal setelah jatuh
     currentMoveY = 0;
     prevMoveY = 0;
   }
-  if (moveX > 11) {
-    moveX = -11;
+  if (moveX > -initMovex) {
+    moveX = initMovex;
   }
   document.getElementById("v-value").innerText = (
     (currentMoveX - prevMoveX) /
@@ -174,10 +165,11 @@ function FreeFallMoveMove(
   time,
 ) {
   theta += 0.005;
+  console.log(initMoveY);
 
-  if (moveY <= -2.4) {
+  if (moveY <= initMoveY) {
     time = 0;
-    moveY = -2.4;
+    moveY = initMoveY;
     movespeed = 0;
     acc = 0;
   }
@@ -190,7 +182,7 @@ function FreeFallMoveMove(
     (currentMove - prevMove) /
     0.015
   ).toFixed(2);
-  document.getElementById("h-value").innerText = (moveY + 2.4).toFixed(2);
+  document.getElementById("h-value").innerText = (moveY - initMoveY).toFixed(2);
 
   return {
     theta,

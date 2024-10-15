@@ -24,16 +24,18 @@ let anglex = 45; //angle terhadap sumbu x
 var toggleff = false;
 
 //move
-let moveX = -6.5;
+let moveX = -5.5;
 let moveY = -2.4;
-let moveZ = -1;
+let moveZ = 0;
+let initMoveY = moveY - 0.001;
+let initMovex = moveX * 2;
 
 var flag = false;
 
 var phi = 0;
 var radius = 10.0;
-var near = -10;
-var far = 4.0;
+var near = 4.0;
+var far = 20;
 var fovy = 45;
 var aspect;
 
@@ -142,6 +144,37 @@ function init() {
         break;
     }
   });
+  // change color
+  document.getElementById("colorButton").addEventListener("click", function () {
+    console.log("Masuk sini");
+    switch (selectedShape) {
+      case "dodecahedron":
+        shape = createDeca();
+        createBuffer(gl, program);
+        break;
+      case "prism":
+        shape = createPrism();
+        createBuffer(gl, program);
+        break;
+      case "cylinder":
+        shape = createCylinder();
+        createBuffer(gl, program);
+        break;
+      case "cube":
+        shape = createCube();
+        createBuffer(gl, program);
+        break;
+      case "sphere":
+        shape = createSphere();
+        createBuffer(gl, program);
+        break;
+      default:
+        shape = createDeca();
+        createBuffer(gl, program);
+        break;
+    }
+  });
+
   const selectMove = document.getElementById("move");
   let glb = document.getElementById("glb-input");
   let gva = document.getElementById("gva-input");
@@ -230,7 +263,7 @@ function init() {
           }
         });
         document.getElementById("submit-gva").onclick = function () {
-          moveY = -2.3;
+          // moveY = -2.3;
           timeSecond = 0;
           moveFunc = verticalMove;
         };
@@ -349,7 +382,7 @@ function init() {
           timeSecond = 0;
         });
         document.getElementById("submit-gff").onclick = function () {
-          moveY = h - 2.4;
+          moveY = h - initMoveY;
           moveFunc = FreeFallMoveMove;
         };
         // moveFunc = FreeFallMoveMove;
@@ -366,13 +399,33 @@ function init() {
 
   document.getElementById("reset").onclick = function () {
     flag = false;
-
     moveX = -6.5;
     moveY = -2.4;
     moveZ = -1;
     document.getElementById("toggle").innerText = "Start";
     timeSecond = 0;
   };
+
+  document.getElementById("zoom-i").addEventListener("click", function () {
+    if (moveZ <= 3) {
+      moveZ += 0.5;
+      moveX += 0.4;
+      moveY += 0.2;
+      initMoveY = moveY - 0.01;
+      initMovex = moveX * 2;
+      console.log(moveZ, moveY);
+    }
+  });
+  document.getElementById("zoom-o").addEventListener("click", function () {
+    if (moveZ >= -3) {
+      moveZ -= 0.5;
+      moveX -= 0.4;
+      moveY -= 0.2;
+      initMoveY = moveY - 0.01;
+      initMovex = moveX * 2;
+      console.log(moveZ, moveY);
+    }
+  });
 
   viewMatrixLocation = gl.getUniformLocation(program, "uViewMatrix");
   projectionMatrixLoc = gl.getUniformLocation(program, "uProjectionMatrix");

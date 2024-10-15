@@ -11,11 +11,17 @@ function uniformStrightMove(
   var prevMove = movespeed * (time - 0.015);
   var currentMove = movespeed * time;
   theta += thetajump;
-  moveX = moveX + (currentMove - prevMove);
+  moveX = moveX + (currentMove - prevMove)*direction;
   angle += anglejump;
-  if (moveX > -initMovex) {
-    moveX = initMovex;
-  }
+  if(direction == 1){
+    if (moveX > -initMovex) {
+      moveX = initMovex;
+    }
+  }else if(direction == -1){
+    if(moveX < initMovex){
+      moveX = -initMovex
+    }
+  }  
   document.getElementById("v-value").innerText = (
     (currentMove - prevMove) /
     0.015
@@ -46,11 +52,17 @@ function constantAcceleration(
   var prevmove = movespeed * (time - 0.015) + acc * Math.pow(time - 0.015, 2);
   theta += thetajump;
   var calcuate = movespeed * time + acc * Math.pow(time, 2);
-  moveX = moveX + (calcuate - prevmove);
-  angle += anglejump;
-  if (moveX > -initMovex) {
-    moveX = initMovex;
-  }
+  moveX = moveX + (calcuate - prevmove ) *direction;
+  angle += anglejump;  
+  if(direction == 1){
+    if (moveX > -initMovex) {
+      moveX = initMovex;
+    }
+  }else if(direction == -1){
+    if(moveX < initMovex){
+      moveX = -initMovex
+    }
+  }  
   document.getElementById("v-value").innerText = (
     (calcuate - prevmove) /
     0.015
@@ -116,7 +128,7 @@ function parabolaMove(
   // Posisi horizontal (x)
   var prevMoveX = velocityX * (time - 0.01);
   var currentMoveX = velocityX * time;
-  moveX = moveX + (currentMoveX - prevMoveX);
+  moveX = moveX + (currentMoveX - prevMoveX) * direction;
 
   // Posisi vertikal (y)
   var prevMoveY =
@@ -134,9 +146,20 @@ function parabolaMove(
     currentMoveY = 0;
     prevMoveY = 0;
   }
-  if (moveX > -initMovex) {
-    moveX = initMovex;
-  }
+  // if (moveX > -initMovex) {
+  //   moveX = initMovex;
+  // }
+
+  if(direction == 1){
+    if (moveX > -initMovex) {
+      moveX = initMovex;
+    }
+  }else if(direction == -1){
+    if(moveX < initMovex){
+      moveX = -initMovex
+    }
+  }  
+  
   document.getElementById("v-value").innerText = (
     (currentMoveX - prevMoveX) /
     0.015

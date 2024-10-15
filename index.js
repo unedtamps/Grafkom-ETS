@@ -12,6 +12,7 @@ var projectionMatrixLoc;
 var moveMatrixLocation;
 var rotationMatrixLocation;
 var toggle = false;
+var direction = 1;
 
 let movespeed = 0;
 let angle = 0;
@@ -438,6 +439,11 @@ function init() {
     thetajump -= 0.01;
     anglejump -= 1;
   });
+
+  document.getElementById("dirtoggle").addEventListener("click", function () {
+    direction *=-1
+  });
+
 
   viewMatrixLocation = gl.getUniformLocation(program, "uViewMatrix");
   projectionMatrixLoc = gl.getUniformLocation(program, "uProjectionMatrix");
